@@ -9,45 +9,72 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
-    if( (master_socket = socket(AF_INET , SOCK_STREAM , 0)) == 0)
+    //Create socket
+	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+	if (socket_desc == -1)
 	{
-		printf("socket failed\n");
-		return 0;
-	}
-
-    if( setsockopt(master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt,
-		sizeof(opt)) < 0 )
-	{
-		printf("setsockopt");
+		printf("Could not create socket");
 	}
 	
-	//type of socket created
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons( PORT );
-		
-	//bind the socket to localhost port 8888
-	if (bind(master_socket, (struct sockaddr *)&address, sizeof(address))<0)
-	{
-		perror("bind failed");
-		exit(EXIT_FAILURE);
-	}
-	printf("Listener on port %d \n", PORT);
-		
-	//try to specify maximum of 3 pending connections for the master socket
-	if (listen(master_socket, 3) < 0)
-	{
-		perror("listen");
-		exit(EXIT_FAILURE);
-	}
-    
-    addrlen = sizeof(address);
-	puts("Waiting for connections ...");
+	//Prepare the sockaddr_in structure
+	server.sin_family = AF_INET;
+	server.sin_addr.s_addr = INADDR_ANY;
+	server.sin_port = htons( PORT );
 
-    start();
-    return 0;
+    //Bind
+	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
+	{
+		//print the error message
+		perror("bind failed. Error");
+		return 1;
+	}
+
+	printf("Using port %d\n", PORT);
+    while(1){
+        i++;
+        start();
+    }
 }
 
 void start(){
-    
+	//Listen
+
+	listen(socket_desc , 3);
+    //Accept and incoming connection
+	c = sizeof(struct sockaddr_in);
+	
+	//accept connection from an incoming client
+	client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
+	if (client_sock < 0)
+	{
+		perror("accept failed");
+		return;
+	}
+
+	int n, s = 3;
+	//Receive a message from client
+	while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
+	{
+		//Send the message back to client
+        time(&now);
+		n = client_message[1] - '0';
+		if(client_message[2] != ' ')
+		{
+			n = n*10 + (client_message[2] - '0') + (s++)*0;
+			if(client_message[3] != ' ')
+				n = n*10 + (client_message[2] - '0') + (s++)*0;
+		}
+		printf("%ld:\t  #%-4d (%c %3d) from %s\n", now, i, client_message[0], n, client_message + s);
+		Trans(n);
+		write(client_sock , "Done" , 5);
+	}
+	
+	if(read_size == 0)
+	{
+		fflush(stdout);
+	}
+	else if(read_size == -1)
+	{
+		perror("recv failed");
+	}
 }

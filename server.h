@@ -1,11 +1,17 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <stdlib.h>
-#include<stdbool.h>
+#include<stdio.h>
+#include<string.h>	//strlen
+#include<sys/socket.h>
+#include<arpa/inet.h>	//inet_addr
+#include<unistd.h>	//write
+#include<stdlib.h>
+#include<time.h>
+#include"trans.h"
 
-#define MAX_C 10
+#define MAX_C 30
 
-int PORT, master_socket, opt = true, addrlen;
-struct sockaddr_in address;
+int PORT, socket_desc , client_sock , c , read_size;
+time_t     now;
+struct sockaddr_in server , client;
+char client_message[2000];
+int i = 0;
+void start();
