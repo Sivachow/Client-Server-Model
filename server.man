@@ -1,0 +1,32 @@
+.TH SERVER 1 "December 2021" "379" "Server Socket Programming Manual"
+
+.SH NAME
+\fB./server\fP [port number] - 
+
+.SH SYNOPSIS
+\fB./server\fP [port number]
+
+.SH DESCRIPTION
+.PP
+Server takes the input argument of port number ranging between 5000 and 64000. and then connects it to the Client. It takes one request
+like web server and processes the request and waits for another one. until an idle time of 30 sec and then closes the socket
+
+.SS Options
+.TP
+1. port number 
+.TP
+Port range :- (5000-64000)
+
+
+.SH AUTHOR
+Written by Siva Chowdeswar Nandipati
+
+.SH REPORTING BUGS
+Report bugs to <sivachow@ualberta.ca>
+
+.SH
+COPYRIGHT
+Copyright © 2021 Siva Chowdeswar Nandipati
+
+.SH SEE ALSO
+client(1)

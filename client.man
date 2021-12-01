@@ -1,0 +1,36 @@
+.TH SERVER 1 "December 2021" "379" "client Socket Programming Manual"
+
+.SH NAME
+\fB./client\fP [port number]\fP [Address]\fP [input] - 
+
+.SH SYNOPSIS
+\fB./client\fP [port number]\fP [Address]\fP [input]
+
+.SH DESCRIPTION
+.PP
+Clients connect to the server using the servers address and also the same port number and then sends transactions and receives them. Also Sleeps 
+as per the given input using Trans.h
+.SS Options
+.TP
+1. port number 
+.TP
+Port range :- (5000-64000)
+.TP
+2. Address (127.0.0.1 is current machines)
+.TP
+eg: host ug01
+.TP
+3.Input is stdin or keyboard
+
+.SH AUTHOR
+Written by Siva Chowdeswar Nandipati
+
+.SH REPORTING BUGS
+Report bugs to <sivachow@ualberta.ca>
+
+.SH
+COPYRIGHT
+Copyright © 2021 Siva Chowdeswar Nandipati
+
+.SH SEE ALSO
+server(1)
